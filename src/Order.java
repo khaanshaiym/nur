@@ -1,17 +1,12 @@
-public class Order {
+public class Order extends BaseEntity {
 
-    private int orderId;
     private MenuItem menuItem;
     private int quantity;
 
-    public Order(int orderId, MenuItem menuItem, int quantity) {
-        this.orderId = orderId;
+    public Order(int id, MenuItem menuItem, int quantity) {
+        super(id);
         this.menuItem = menuItem;
         this.quantity = quantity;
-    }
-
-    public int getOrderId() {
-        return orderId;
     }
 
     public int getQuantity() {
@@ -23,9 +18,17 @@ public class Order {
     }
 
     public void printOrder() {
-        System.out.println("Order ID: " + orderId);
+        System.out.println("Order ID: " + id);
         menuItem.printInfo();
         System.out.println("Quantity: " + quantity);
-        System.out.println("Total price: " + calculateTotal());
+        System.out.println("Total: " + calculateTotal());
+    }
+
+    @Override
+    public String toString() {
+        return "Order{id=" + id +
+                ", item=" + menuItem.getName() +
+                ", quantity=" + quantity +
+                ", total=" + calculateTotal() + '}';
     }
 }
