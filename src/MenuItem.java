@@ -1,20 +1,32 @@
 public class MenuItem {
     private int id;
     private String name;
-    private int price;
+    private double price;
 
-    public MenuItem(int id, String name, int price) {
-        this.id = id;
+    // Конструкторлар
+    public MenuItem() {}
+
+    public MenuItem(String name, double price) {
         this.name = name;
         this.price = price;
     }
 
-    public MenuItem(String name, int price) {
-        this.name = name;
-        this.price = price;
+    // JSON форматында қайтару әдісі
+    public String toJson() {
+        return "{" +
+                "\"id\": " + id + ", " +
+                "\"name\": \"" + name + "\", " +
+                "\"price\": " + price +
+                "}";
     }
 
+    // Геттерлер мен Сеттерлер (Бұларсыз DAO-да қате шығады)
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
     public String getName() { return name; }
-    public int getPrice() { return price; }
+    public void setName(String name) { this.name = name; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 }

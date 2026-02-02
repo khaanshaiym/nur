@@ -1,25 +1,12 @@
 public class Order {
-    private int id;
-    private MenuItem menuItem;
-    private int quantity;
+    private int restaurantId;
+    private String orderDate;
 
-    public Order(int id, MenuItem menuItem, int quantity) {
-        this.id = id;
-        this.menuItem = menuItem;
-        this.quantity = quantity;
+    public Order(int restaurantId, String orderDate) {
+        this.restaurantId = restaurantId;
+        this.orderDate = orderDate;
     }
 
-    public double calculateTotal() {
-        return menuItem.getPrice() * quantity;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{id=" + id +
-                ", item=" + menuItem.getName() +
-                ", quantity=" + quantity +
-                ", total=" + calculateTotal() +
-                "}";
-    }
+    public int getRestaurantId() { return restaurantId; }
+    public String getOrderDate() { return orderDate; }
 }
-

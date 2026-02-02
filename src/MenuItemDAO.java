@@ -4,86 +4,63 @@ import java.util.List;
 
 public class MenuItemDAO {
 
-    // CREATE
+    // WRITE (Создание записи)
     public void save(MenuItem item) {
-        String sql = "INSERT INTO menu_item(name, price) VALUES (?, ?)";
-
+        String sql = "INSERT INTO menuitem (name, price) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, item.getName());
-            ps.setInt(2, item.getPrice());
+            ps.setDouble(2, item.getPrice());
             ps.executeUpdate();
-
-            System.out.println("MenuItem saved");
-
+            System.out.println("Saved: " + item.getName());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // READ
-    public List<MenuItem> findAll() {
+    // READ (Чтение данных)
+    public List<MenuItem> getAll() {
         List<MenuItem> items = new ArrayList<>();
-        String sql = "SELECT id, name, price FROM menu_item";
-
+        String sql = "SELECT * FROM menuitem";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            System.out.println("=== MENU ITEMS ===");
-
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                MenuItem item = new MenuItem(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("price")
-                );
+                MenuItem item = new MenuItem();
+                item.setId(rs.getInt(1));    // ID (1-я колонка)
+                item.setName(rs.getString(2)); // Name (2-я колонка)
+                item.setPrice(rs.getDouble(3)); // Price (3-я колонка)
                 items.add(item);
-                System.out.println(item.getId() + " | " + item.getName() + " | " + item.getPrice());
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return items;
     }
 
-    // UPDATE
-    public void updatePrice(int id, int newPrice) {
-        String sql = "UPDATE menu_item SET price = ? WHERE id = ?";
-
+    // UPDATE (Обновление)
+    public void update(int id, String newName, double newPrice) {
+        String sql = "UPDATE menuitem SET name = ?, price = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, newPrice);
-            ps.setInt(2, id);
-
+            ps.setString(1, newName);
+            ps.setDouble(2, newPrice);
+            ps.setInt(3, id);
             ps.executeUpdate();
-            System.out.println("Price updated");
-
+            System.out.println("Updated ID: " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // DELETE
+    // DELETE (Удаление)
     public void delete(int id) {
-        String sql = "DELETE FROM menu_item WHERE id = ?";
-
+        String sql = "DELETE FROM menuitem WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setInt(1, id);
-            int deleted = ps.executeUpdate();
-
-            if (deleted > 0) {
-                System.out.println("MenuItem deleted");
-            } else {
-                System.out.println("MenuItem not found");
-            }
-
+            ps.executeUpdate();
+            System.out.println("Deleted ID: " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
